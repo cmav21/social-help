@@ -1,83 +1,70 @@
 import React, { Component } from 'react';
-import { Map, GoogleApiWrapper, Marker, InfoWindow } from 'google-maps-react';
+import Map from 'pigeon-maps';
+import Marker from 'pigeon-marker';
+import {Modal} from 'react-bootstrap';
 
 class MapView extends Component {
 
     state = {
-        showingInfoWindow: false,
-        activeMarker: {},
-        selectedPlace: {},
+        showModal: false,
+        selectedIncident: ''
     }
 
-    onMarkerClick = (props, marker, e) =>{
+    handleShow = () => {
         this.setState({
-            selectedPlace: props,
-            activeMarker: marker,
-            showingInfoWindow: !this.state.showingInfoWindow
+            showModal: true
         });
     }
-        
-    onMapClicked = (props) => {
-        if (this.state.showingInfoWindow) {
-            this.setState({
-            showingInfoWindow: false,
-            activeMarker: null
-            })
-        }
-    };
 
-    markersHandler = () => {
-        let incidents = Object.keys(this.props.incidents);
-        return incidents.map((incident, i) => {
-            const {city, latitude, longitude, title, description} = this.props.incidents[incident];
-            return (
-                <Marker 
-                    key={i} 
-                    onClick={this.onMarkerClick}
-                    name={city}
-                    title={title}
-                    description={description}
-                    position={{lat: latitude, lng: longitude}}
-                />
-            );
+    handleClose = () => {
+        this.setState({
+            showModal: false
+        });
+    }
+
+    renderMarkers = () => {
+        const incidents = this.props.incidents;
+
+        return Object.keys(incidents).map((incident, i) => {
+            console.log(incidents[incident]);         
+            return <Marker key={incident} anchor={[incidents[incident].latitude, incidents[incident].longitude]} payload={1} onClick={()=>this.saveIncidentHandler(this.props.incidents[incident])} />
+        });
+
+    }
+
+    saveIncidentHandler = (selectedIncident) => {
+        console.log(selectedIncident);
+        this.setState({
+            selectedIncident
         })
+        this.handleShow();
+    }
+
+    renderBodyContent = () => {
+        const incident = Object.keys(this.state.selectedIncident);
+        return incident.map((element, i) => {
+            if(element !== 'usuarioId' ){
+                return <><label>{element}: {this.state.selectedIncident[element]}</label><br/></>
+            }
+        });
     }
 
     render() {
-        return(
-            <Map 
-                google={this.props.google}
-                onClick={this.onMapClicked}
-                zoom={8}
-                styles={[{
-                    width:'100%',
-                    height: '100%'
-                }]}
-                initialCenter={{lat:47.444, lng: -122.176}}
-            >
-                {
-                    this.markersHandler()
-                }
-                <InfoWindow
-                    marker={this.state.activeMarker}
-                    visible={this.state.showingInfoWindow}>
-                    <div>
-                        <div>
-                            Titulo:
-                            {this.state.selectedPlace.title}
-                        </div>
-                        <div>  
-                            Descripcion:
-                            {this.state.selectedPlace.description}
-                        </div>
-                        <a href="http://" target="_blank" rel="noopener noreferrer">{`<<ver detalles>>`}</a>
-                    </div>
-                </InfoWindow>
-            </Map>
+        return (
+            <Map center={[19.2433, -103.725]} zoom={10}>
+                {this.renderMarkers()}
+            
+                <Modal show={this.state.showModal} onHide={this.handleClose}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>{this.state.selectedIncident.title}</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        {this.renderBodyContent()}
+                    </Modal.Body>
+                </Modal>
+        </Map>
         );
     }
 }
 
-export default GoogleApiWrapper({
-    apiKey: 'AIzaSyDArus-cyzxHe4nelbfT3JjACCRG3AUZsg'
-})(MapView);
+export default MapView;
