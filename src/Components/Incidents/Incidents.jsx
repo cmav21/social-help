@@ -1,31 +1,36 @@
 import React, { Component } from 'react';
+import MapView from './Components/Map/MapView';
+import "react-datepicker/dist/react-datepicker.css";
 import firebase from 'firebase';
-import IncidentsCard from './IncidentsCard';
-import { CLIENT_RENEG_LIMIT } from 'tls';
+import NavigationBar from '../NavigationBar/NavigationBar';
+import { Container } from 'react-bootstrap';
+import Filters from './Components/Filters';
+import { withRouter } from 'react-router-dom';
+class Home extends Component {
 
-class Incidents extends Component {
-    
     state = {
-        incidents: []
+        class: '',
+        startDate: new Date(),
+        incidents: [],
+        usuarios: [],
+        showModal: false,
+        email:'',
+        password:''
+    }
+
+    emailHandler = e => {
+        this.setState({
+            email: e.target.value
+        })
+    }
+
+    passwordHandler = e => {
+        this.setState({
+            password: e.target.value
+        })
     }
 
     componentDidMount(){    
-        // let data = {
-
-        //     date: '2018-12-12',
-        //     zone: 'centro',
-        //     type: 'robo',
-        //     city: 'colima',
-        //     longitude: 12.122,
-        //     latitude: -2.213, 
-        //     description: 'Ocurrio un robo',
-        //     title: 'Robo',
-        // }
-        // firebase.database().ref('incidents').push(data, (err)=>{
-        //     if(err)
-        //         throw new Error(err);
-        // })
-
         firebase.database().ref('incidents').on('value', (snapshot)=> {
             let data = snapshot.val();
             this.setState({
@@ -34,22 +39,61 @@ class Incidents extends Component {
         });
     }
 
-    renderIncidentsHandler = () => {
-        let keys = Object.keys(this.state.incidents);
-        return keys.map((incident, i) => {
-            return <IncidentsCard key={incident} {...this.state.incidents[incident]}/>
+    handleChange = (date) => {
+        this.setState({
+            startDate: date 
         })
     }
-    
+
+    toogleClass = () => {
+        if(this.state.class === '') {
+            this.setState({
+                class: 'navToggle'
+            });
+        } else {
+            this.setState({
+                class: ''
+            });
+        }
+    }
+
+    handleShow = () => {
+        this.setState({
+            showModal: true
+        });
+    }
+
+    handleClose = () => {
+        this.setState({
+            showModal: false
+        });
+    }
+
+    signInConnection = () => {
+        const auth = firebase.auth();
+        auth.signInWithEmailAndPassword(this.state.email, this.state.password);
+    }
+
     render(){
         return(
-            <div>
-                {
-                    this.renderIncidentsHandler()
-                }
-            </div>
-        );
+            <>
+                <NavigationBar 
+                    filters={true}
+                    openFilters={this.handleShow}
+                />
+                <Container fluid={true} style={{height:'90.8vh', margin:0, padding:0}}>
+                    <MapView incidents={this.state.incidents}/>                    
+                </Container>
+                <Filters 
+                    show={this.state.showModal} 
+                    handleClose={this.handleClose}
+                    startDate={this.state.startDate}
+                    handleChange={this.state.handleChange}
+                />
+            </> 
+
+        )
     }
 }
 
-export default Incidents;
+export default withRouter(Home);

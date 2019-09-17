@@ -1,11 +1,11 @@
 import React from 'react';
 import NavigationBar from '../NavigationBar/NavigationBar';
 
-
-const Home = () => (
+const AboutUs = () => (
     <>
         <NavigationBar />
+        <h1>hola</h1>
     </>
-)
+);
 
-export default Home;
+export default AboutUs;
