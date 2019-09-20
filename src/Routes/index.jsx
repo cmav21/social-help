@@ -5,6 +5,7 @@ import Incidents from '../Components/Incidents/Incidents';
 import AboutUs from '../Components/About/AboutUs';
 import Simbology from '../Components/Simbology/Simbology';
 import Home from '../Components/Home/Home';
+import Login from '../Components/Login/Login';
 
 
 const AppRouter = () => (
@@ -14,6 +15,7 @@ const AppRouter = () => (
             <Route path="/incidentes" exact component={Incidents} />
             <Route path="/Simbologia" exact component={Simbology} />
             <Route path="/nosotros" exact component={AboutUs} />
+            <Route path="/ingresar" exact component={Login} />
             <Route component={Greet}/>
         </Switch>
     </Router>

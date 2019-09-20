@@ -26,7 +26,6 @@ class MapView extends Component {
         const incidents = this.props.incidents;
 
         return Object.keys(incidents).map((incident, i) => {
-            console.log(incidents[incident]);         
             return <Marker key={incident} anchor={[incidents[incident].latitude, incidents[incident].longitude]} payload={1} onClick={()=>this.saveIncidentHandler(this.props.incidents[incident])} />
         });
 
@@ -50,7 +49,7 @@ class MapView extends Component {
         }
         return Object.keys(data).map((element, i) => {
             if(element !== 'usuarioId' ){
-                return <><label>{element}: {data[element]}</label><br/></>
+                return <React.Fragment key={element}><label>{element}: {data[element]}</label><br/></React.Fragment>
             }
         });
     }
@@ -65,7 +64,6 @@ class MapView extends Component {
                     title={this.state.selectedIncident.title}
                     renderContent={this.renderBodyContent}
                 />
-
         </Map>
         );
     }
