@@ -2,10 +2,10 @@ import React from 'react';
 import './App.css';
 import Routes from './Routes/index'
 
-function App({store}) {
+function App() {
   return (
     <div className="App">
-      <Routes store={store} />
+      <Routes />
     </div>
   );
 }

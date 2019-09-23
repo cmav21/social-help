@@ -17,13 +17,16 @@ const NavigationBar = ({ openFilters, filters }) => (
                     />
                     {' Social Help '}
                 </Navbar.Brand>
-                <Nav className="ml-auto">
-                    <NavLink className="nav-link" to="/incidentes">Incidentes</NavLink>
-                    <NavLink className="nav-link" to="/nosotros">Sobre nosotros</NavLink>
-                    {filters && <NavLink className="nav-link" to="#" onClick={openFilters}>Filtros</NavLink> }
-                    <NavLink className="nav-link" to="/simbologia">Simbologia</NavLink>
-                    <NavLink className="nav-link" to="/ingresar">Iniciar sesión</NavLink>
-                </Nav>
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Collapse id="basic-navbar-nav">
+                    <Nav className="ml-auto">
+                        <NavLink className="nav-link" to="/incidentes">Incidentes</NavLink>
+                        <NavLink className="nav-link" to="/nosotros">Sobre nosotros</NavLink>
+                        {filters && <NavLink className="nav-link" to="#" onClick={openFilters}>Filtros</NavLink> }
+                        <NavLink className="nav-link" to="/simbologia">Simbologia</NavLink>
+                        <NavLink className="nav-link" to="/ingresar">Iniciar sesión</NavLink>
+                    </Nav>
+                </Navbar.Collapse>
             </Navbar>
         </Container>
     </Container>

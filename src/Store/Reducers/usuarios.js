@@ -1,4 +1,3 @@
-import { login, logout } from '../Actions/Users';
 
 const initialState = {
      type: 'LOGOUT', 

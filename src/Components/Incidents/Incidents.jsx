@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import MapView from './Components/Map/MapView';
 import "react-datepicker/dist/react-datepicker.css";
-import firebase, { app } from 'firebase';
+import firebase from 'firebase';
 import NavigationBar from '../NavigationBar/NavigationBar';
 import { Container } from 'react-bootstrap';
 import Filters from './Components/Filters';
@@ -33,7 +33,7 @@ class Home extends Component {
         const incidents = {...this.state.incidents};
         const filters = this.state.appliedFilters;
         if(!this.state.showFilters) {
-            const result = Object.keys(incidents).filter((element, i ) => {
+            const result = Object.keys(incidents).filter((element) => {
                 for (const key in filters) {
                     if(incidents[element][key] === filters[key]){
                         return element;
@@ -141,6 +141,9 @@ class Home extends Component {
     render(){
         return(
             <>
+            {
+                console.log(this.props)
+            }
                 <NavigationBar 
                     filters={true}
                     openFilters={this.handleShow}

@@ -6,11 +6,9 @@ import AboutUs from '../Components/About/AboutUs';
 import Simbology from '../Components/Simbology/Simbology';
 import Home from '../Components/Home/Home';
 import Login from '../Components/Login/Login';
-import { Provider } from 'react-redux';
 
 
-const AppRouter = ({ store }) => (
-    <Provider store={ store }>     
+const AppRouter = () => (
         <Router>
             <Switch>
                 <Route path="/" exact component={Home} />
@@ -21,8 +19,6 @@ const AppRouter = ({ store }) => (
                 <Route component={Greet}/>
             </Switch>
         </Router>
-    </Provider>
-
 );
 
 export default AppRouter;
