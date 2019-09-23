@@ -3,6 +3,8 @@ import firebase from 'firebase';
 import Header from '../NavigationBar/NavigationBar';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { login } from '../../Store/Actions/Users';
 
 class Login extends Component {
 
@@ -20,7 +22,7 @@ class Login extends Component {
         e.preventDefault();
         firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
         .then(user => {
-            console.log(this.props.history);
+            this.props.authenticateUser(user);
             this.props.history.goBack();
         })
         .catch(( err ) => {
@@ -61,4 +63,17 @@ class Login extends Component {
     }
 }
 
-export default withRouter(Login);
+const mapStateToProps = state => {
+    return {
+        newState: state
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        authenticateUser: ( user ) => dispatch(login(user))
+    }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Login));

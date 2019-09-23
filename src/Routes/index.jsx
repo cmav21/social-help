@@ -6,19 +6,22 @@ import AboutUs from '../Components/About/AboutUs';
 import Simbology from '../Components/Simbology/Simbology';
 import Home from '../Components/Home/Home';
 import Login from '../Components/Login/Login';
+import { Provider } from 'react-redux';
 
 
-const AppRouter = () => (
-    <Router>
-        <Switch>
-            <Route path="/" exact component={Home} />
-            <Route path="/incidentes" exact component={Incidents} />
-            <Route path="/Simbologia" exact component={Simbology} />
-            <Route path="/nosotros" exact component={AboutUs} />
-            <Route path="/ingresar" exact component={Login} />
-            <Route component={Greet}/>
-        </Switch>
-    </Router>
+const AppRouter = ({ store }) => (
+    <Provider store={ store }>     
+        <Router>
+            <Switch>
+                <Route path="/" exact component={Home} />
+                <Route path="/incidentes" exact component={Incidents} />
+                <Route path="/Simbologia" exact component={Simbology} />
+                <Route path="/nosotros" exact component={AboutUs} />
+                <Route path="/ingresar" exact component={Login} />
+                <Route component={Greet}/>
+            </Switch>
+        </Router>
+    </Provider>
 
 );
 

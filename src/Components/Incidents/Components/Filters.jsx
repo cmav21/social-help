@@ -1,35 +1,40 @@
 import React from 'react';
 import { Modal, Button, Container, Row, Col, Form } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
+import { connect } from 'react-redux';
 
-const Filters = ({ show, handleClose, startDate, handleChange, showFilters, showFiltersHandler, addFilter, applyFilters }) => {
+const Filters = (props) => {
     const DatePickerInput = React.forwardRef(({ value, onClick }, ref) => (
         <Button onClick={onClick}>
           {value}
         </Button>
     ));
-    return (<Modal show={show} onHide={handleClose}>
+
+    return (<Modal show={props.show} onHide={props.handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Filtros</Modal.Title>
         </Modal.Header>
         <Modal.Body>
             <Form.Group controlId="formBasicCheckbox">
-                <Form.Check defaultChecked={showFilters} onChange={showFiltersHandler} type="checkbox" label="Ver todos los incidentes" />
+                <Form.Check defaultChecked={props.showFilters} onChange={props.showFiltersHandler} type="checkbox" label="Ver todos los incidentes" />
+                {
+                    props.newState.Usuarios.logged && <Form.Check defaultChecked={props.showUserData} onChange={props.userData} type="checkbox" label="Mostrar mis incidentes" />
+                }
             </Form.Group>
-            {!showFilters && <Container>
+            {!props.showFilters && <Container>
                 <Row>
                     <Col md={6} style={{marginBottom: 5}}>
                         <label>Fecha</label><br/>
                         <DatePicker
                             dateFormat="yyyy/MM/dd"
-                            selected={startDate}
-                            onChange={handleChange}
+                            selected={props.startDate}
+                            onChange={props.handleChange}
                             customInput={ <DatePickerInput />}
                         />
                     </Col>
                     <Col md={6} style={{marginBottom: 5}}>
                         <label>Tipo de incidente</label><br/>
-                        <select name="" id="" onChange={(e) => addFilter( 'type', e.target.value)}>
+                        <select name="" id="" onChange={(e) => props.addFilter( 'type', e.target.value)}>
                             <option value=""></option>                            
                             <option value="robo">Robo</option>
                             <option value="Venta de drogas">Acoso</option>
@@ -49,7 +54,7 @@ const Filters = ({ show, handleClose, startDate, handleChange, showFilters, show
                     </Col> */}
                     <Col md={6} style={{marginBottom: 5}}>
                         <label>Zona</label><br/>
-                        <select name="" id="" onClick={(e) => addFilter( 'zone', e.target.value)}>
+                        <select name="" id="" onClick={(e) => props.addFilter( 'zone', e.target.value)}>
                             <option value=""></option>                            
                             <option value="robo">Robo</option>
                             <option value="Venta de drogas">Acoso</option>
@@ -60,14 +65,20 @@ const Filters = ({ show, handleClose, startDate, handleChange, showFilters, show
             </Container>}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={props.handleClose}>
             Cancelar
           </Button>
-          <Button variant="primary" onClick={applyFilters}>
+          <Button variant="primary" onClick={props.applyFilters}>
             Aceptar
           </Button>
         </Modal.Footer>
     </Modal>
 );};
 
-export default Filters;
+const mapStateToProps = state => {
+    return {
+        newState: state
+    }
+}
+
+export default connect(mapStateToProps)(Filters);

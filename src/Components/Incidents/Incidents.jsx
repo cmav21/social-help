@@ -6,7 +6,7 @@ import NavigationBar from '../NavigationBar/NavigationBar';
 import { Container } from 'react-bootstrap';
 import Filters from './Components/Filters';
 import { withRouter } from 'react-router-dom';
-import { isFunctionDeclaration } from '@babel/types';
+import { connect } from 'react-redux';
 class Home extends Component {
 
     state = {
@@ -19,7 +19,8 @@ class Home extends Component {
         email:'',
         password:'',
         showFilters: true,
-        appliedFilters: {}
+        appliedFilters: {},
+        showUserData: false
     }
 
     showFiltersHandler = () => {
@@ -70,13 +71,40 @@ class Home extends Component {
         })
     }
 
+    showUserDataHandler = () => {
+        const showData = !this.state.showUserData; 
+        if(showData) {
+            const incidents = {...this.state.incidents};
+            const dataUsuario = Object.keys(incidents).filter(element =>  incidents[element].usuarioId === '5DXQgtHgpwMy5bq276KghdeEbu63')
+            const filterByUser = dataUsuario.map((element,i) => incidents[element]);
+            this.setState({
+                data: filterByUser,
+                showUserData: showData
+            });
+        } else {
+            this.setState({
+                data: this.state.incidents,
+                showUserData: showData
+            });
+        }
+    }
+
     componentDidMount(){
         firebase.database().ref('incidents').on('value', (snapshot)=> {
             let data = snapshot.val();
-            this.setState({
-                incidents: data,
-                data
-            })
+            if(this.props.newState.Usuarios.logged) {
+                const dataUsuario = Object.keys(data).filter(element =>  data[element].usuarioId === '5DXQgtHgpwMy5bq276KghdeEbu63')
+                const filterByUser = dataUsuario.map((element,i) => data[element]);
+                this.setState({
+                    incidents: data,
+                    data
+                });
+            } else {
+                this.setState({
+                    incidents: data,
+                    data
+                });
+            }
         });
     }
 
@@ -129,6 +157,8 @@ class Home extends Component {
                     showFilters={this.state.showFilters}
                     addFilter={this.addFilterHandler}
                     applyFilters={this.applyFilters}
+                    userData={this.showUserDataHandler}
+                    showUserData={this.state.showUserData}
                 />
             </> 
 
@@ -136,4 +166,10 @@ class Home extends Component {
     }
 }
 
-export default withRouter(Home);
+const mapStateToProps = state => {
+    return {
+        newState: state
+    }
+}
+
+export default connect(mapStateToProps)(withRouter(Home));
