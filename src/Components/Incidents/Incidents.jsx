@@ -7,6 +7,8 @@ import { Container } from 'react-bootstrap';
 import Filters from './Components/Filters';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { verTodos, datosUsuario, porFiltro, todasZonas, zonaPorFiltro } from '../../Store/Actions/Filtros';
+
 class Home extends Component {
 
     state = {
@@ -21,12 +23,6 @@ class Home extends Component {
         showFilters: true,
         appliedFilters: {},
         showUserData: false
-    }
-
-    showFiltersHandler = () => {
-        this.setState({
-            showFilters: !this.state.showFilters
-        });
     }
 
     applyFilters = () => {
@@ -57,18 +53,6 @@ class Home extends Component {
         this.setState({
             appliedFilters: filters 
         });
-    }
-
-    emailHandler = e => {
-        this.setState({
-            email: e.target.value
-        })
-    }
-
-    passwordHandler = e => {
-        this.setState({
-            password: e.target.value
-        })
     }
 
     showUserDataHandler = () => {
@@ -114,18 +98,6 @@ class Home extends Component {
         })
     }
 
-    toogleClass = () => {
-        if(this.state.class === '') {
-            this.setState({
-                class: 'navToggle'
-            });
-        } else {
-            this.setState({
-                class: ''
-            });
-        }
-    }
-
     handleShow = () => {
         this.setState({
             showModal: true
@@ -138,6 +110,10 @@ class Home extends Component {
         });
     }
 
+    applyFilters(filter) {
+        this.props.dataFiltered(filter, this.state.incidents, this.state.appliedFilters);
+    }
+
     render(){
         return(
             <>
@@ -148,7 +124,7 @@ class Home extends Component {
                     filters={true}
                     openFilters={this.handleShow}
                 />
-                <Container fluid={true} style={{height:'90.8vh', margin:0, padding:0}}>
+                <Container fluid={true} style={{height:'99vh', margin:0, padding:0}}>
                     <MapView incidents={this.state.data}/>                    
                 </Container>
                 <Filters 
@@ -156,13 +132,15 @@ class Home extends Component {
                     handleClose={this.handleClose}
                     startDate={this.state.startDate}
                     handleChange={this.state.handleChange}
-                    showFiltersHandler={this.showFiltersHandler}
-                    showFilters={this.state.showFilters}
-                    addFilter={this.addFilterHandler}
-                    applyFilters={this.applyFilters}
-                    userData={this.showUserDataHandler}
-                    showUserData={this.state.showUserData}
+                    todos={()=>this.props.todos(this.state.incidents)}
+                    incidentesUsurio={()=>this.props.usuario(this.state.incidents)}
+                    porFiltro={()=>this.props.filtro(this.state.incidents)}
+                    todasZonas={()=>this.props.allZones(this.state.incidents)}
+                    filtroPorZona={(filtro)=>this.props.filtroZona(filtro,this.state.incidents)}
+                    logged={this.props.newState.Usuarios.logged}
+                    aplicarFiltros={(filtro)=>this.applyFilters(filtro)}
                 />
+                {console.log(this.props)}
             </> 
 
         )
@@ -171,8 +149,44 @@ class Home extends Component {
 
 const mapStateToProps = state => {
     return {
-        newState: state
+        newState: state,
+        dataFiltered: (filter, data, filters = null) => filterData(filter,data, filters)
     }
 }
 
-export default connect(mapStateToProps)(withRouter(Home));
+const filterData = (filter, data, filters) => {
+    switch (filter) {
+        case 'DATOS_USUARIO':
+                const dataUsuario = Object.keys(data).filter(element =>  data[element].usuarioId === '5DXQgtHgpwMy5bq276KghdeEbu63')
+                const filterByUser = dataUsuario.map((element,i) => data[element]);
+                return filterByUser;
+            break;
+        case 'VER_TODOS':
+            return data;
+        break;
+        // case 'POR_FILTRO':
+            
+        //     break;
+        // case 'FILTRO_ZONA':
+            
+        //     break;
+        case 'TODAS_ZONAS':
+            return data;
+            break;
+        default:
+            return data;
+        break;
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        todos: (data) => dispatch(verTodos(data)),
+        usuario: (data) => dispatch(datosUsuario(data)),
+        filtro: (data) => dispatch(porFiltro(data)),
+        allZones: (data) => dispatch(todasZonas(data)),
+        filtroZona: (filtro,data) => dispatch(zonaPorFiltro(filtro,data))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Home));

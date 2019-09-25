@@ -12,8 +12,9 @@ const AppRouter = () => (
         <Router>
             <Switch>
                 <Route path="/" exact component={Home} />
+                <Route path="/home" exact component={Home} />
                 <Route path="/incidentes" exact component={Incidents} />
-                <Route path="/Simbologia" exact component={Simbology} />
+                <Route path="/simbologia" exact component={Simbology} />
                 <Route path="/nosotros" exact component={AboutUs} />
                 <Route path="/ingresar" exact component={Login} />
                 <Route component={Greet}/>

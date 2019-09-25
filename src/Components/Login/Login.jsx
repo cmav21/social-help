@@ -5,6 +5,7 @@ import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { login } from '../../Store/Actions/Users';
+import './login.scss';
 
 class Login extends Component {
 
@@ -35,10 +36,11 @@ class Login extends Component {
         return(
             <>
                 <Header />
-                <Container>
+                <Container className="login">
                     <Row style={{display:'flex', justifyContent:'center'}}>
                         <Col sm={12} md={6} className="my-5">
-                            <Form>
+                            <h1>Inicio de Sesión</h1>
+                            <Form className="login">
                                 <Form.Group controlId="formBasicEmail">
                                     <Form.Label>Correo electronico</Form.Label>
                                     <Form.Control type="email" placeholder="Enter email" onChange={(e)=>this.changeCredentialsHandler(e.target.value, 'email')} />
@@ -55,6 +57,9 @@ class Login extends Component {
                                     Ingresar
                                 </Button>
                             </Form>
+                            <div className="login">
+                                <small>Las credenciales a ingresas son las que fueron proporcionadas en la aplicación</small>
+                            </div>
                         </Col>
                     </Row>
                 </Container>

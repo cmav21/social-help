@@ -1,43 +1,66 @@
 import React from 'react';
 import NavigationBar from '../NavigationBar/NavigationBar';
 import { Container, Row, Col } from 'react-bootstrap';
+import Symbol from './Symbol';
+import './simbology.scss';
+import Thief from '../../assets/thief.png'
+import Violence from '../../assets/violence.png'
+import AlmostDanger from '../../assets/almostDanger.png'
+import Safe from '../../assets/safe.png'
+import Danger from '../../assets/danger.png'
+import Bully from '../../assets/bully.png'
+
 
 const Symbology = () => {
 
-    const data = {
-        thief: 'Referente a un robo en la zona indicada',
-        bully: 'Referente a cualquier tipo de acoso',
-        violence: 'Violencia o disturbios en la zonas',
-        safe: 'Zona segura',
-        almostDanger: 'Sona con una cantidad de incidentes media',
-        danger: 'Zona peligrosa',
-    };
+    const data = [
+        {
+            text: 'Referente a un robo en la zona indicada',
+            image: Thief
+        },
+        {
+            text: 'Referente a cualquier tipo de acoso',
+            image: Bully
+        },
+        {
+            text: 'Violencia o disturbios en las zonas',
+            image: Violence
+        },
+        {
+            text: 'Zona segura',
+            image: Safe
+        },
+        {
+            text: 'Zona con una cantidad de incidentes media',
+            image: AlmostDanger
+        },
+        {
+            text: 'Zona peligrosa',
+            image: Danger
+        }
 
-    const renderSymbols = () => {
-        return Object.keys(data).map((type, i) => {
-            return <Row key={i}>
-                <Col>
-                    <ul>
-                        <li>
-                            <img src={require(`../../assets/${type}.png`)} alt=""/>
-                            <label>{data[type]}</label>
-                        </li>                    
-                    </ul>
-                </Col>
-            </Row>
-        });
-    } 
+    ]
+
+    const renderSymbols = () => (
+        data.map(({text, image}, i) => (
+            <Col xs={12} md={4} className="mb-4">
+                <Symbol image={image} text={text} />
+            </Col>
+        ))
+    ) 
 
     return(
         <>
             <NavigationBar />
-            <Container style={{marginTop:10}}>
+            <Container className="symbology">
                 <Row>
                     <Col>
                         <h1>Lista de simbolos</h1>
                     </Col>
                 </Row>
-                {renderSymbols()}
+                <Row className="symbols">
+                    {renderSymbols()}
+                </Row>
             </Container>
         </>
     );
