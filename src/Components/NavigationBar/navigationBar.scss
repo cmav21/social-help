@@ -1,0 +1,99 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700");
+
+body {
+    font-family: 'Poppins',sans-serif;
+}
+
+.reduceOpacity {
+    transition: 500ms;
+    opacity: 1;
+    background-color: black;
+}
+
+.navigationBar {
+    background-color: black;
+    opacity: .9;
+    .nabvar {
+        transition: 500ms;
+        height: 100px;
+    }
+
+    .reduceHeight {
+        transition: 500ms;
+        height: 80px;
+        opacity: 1;
+    }
+
+    .logo {
+        font-weight: 550;
+        font-size: 28px;
+    }
+    .ml-auto{
+        .nav-link {
+            color: white;
+            font-size: 18px;
+        }
+
+        .nav-link:hover {
+            transition: 500ms;
+            color: #df42b1!important;
+        }
+
+        .loginButton {
+                position: relative;
+                z-index: 1;
+                height: 46px;
+                line-height: 46px;
+                font-size: 14px;
+                font-weight: 500;
+                border: none;
+                display: inline-block;
+                padding: 0 25px;
+                text-align: center;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                color: #ffffff;
+                border-radius: 23px;
+                -webkit-transition-duration: 500ms;
+                -o-transition-duration: 500ms;
+                transition-duration: 500ms;
+                overflow: hidden; 
+                .loginButton-btn i {
+                  margin-left: 5px; 
+                }
+        }
+
+        .loginButton::before {
+            -webkit-transition-duration: 800ms;
+            -o-transition-duration: 800ms;
+            transition-duration: 800ms;
+            position: absolute;
+            width: 120%;
+            height: 120%;
+            top: -10%;
+            left: -10%;
+            content: '';
+            background: #df42b1;
+            background-image: -webkit-linear-gradient(120deg, #505add 0%, #df42b1 100%);
+            background-image: -ms-linear-gradient(120deg, #505add 0%, #df42b1 100%);
+            z-index: -2; }
+          .loginButton:focus, .loginButton:hover {
+            font-weight: 500;
+            background-color: #ffffff;
+            color: #111343 !important;
+            -webkit-box-shadow: 0 2px 40px 8px rgba(15, 15, 15, 0.15);
+            box-shadow: 0 2px 40px 8px rgba(15, 15, 15, 0.15);
+            }
+            .loginButton:focus i, .loginButton:hover i {
+              -webkit-animation: buttonIcon 1s ease-in infinite;
+              animation: buttonIcon 1s ease-in infinite;
+            }
+            .loginButton:focus::before, .loginButton:hover::before {
+              left: 110%; 
+             }
+    }
+}
+
+.active {
+    color: #df42b1!important;
+}
