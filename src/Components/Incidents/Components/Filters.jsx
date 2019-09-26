@@ -7,13 +7,20 @@ import DatePickerInput from './datepicker';
 class Filters extends Component {
     
     state = {
-        filter: '',
+        filter: [],
         todos: true,
         usuario: false,
         filtros: false,
         todasZonas: true,
         porFiltrosZonas: false,
         filtroZona: ''        
+    }
+
+    addFilter = (newFilter) => {
+        const filters = [...this.state.filter, newFilter];
+        this.setState({
+            filter: filters
+        });
     }
 
     filtersHandler(keyTrue, keyFalse, secondKeyFalse = '') {
@@ -84,7 +91,10 @@ class Filters extends Component {
                         <Form.Check
                             checked={this.state.filtros} 
                             type="checkbox" 
-                            onClick={()=>{this.filtersHandler('filtros', 'usuario', 'todos'); this.props.porFiltro()}} 
+                            onClick={()=>{this.filtersHandler('filtros', 'usuario', 'todos'); this.props.porFiltro({
+                                date: this.props.startDate,
+                                type: this.state.filter
+                            })}} 
                             label="Seleccionar filtros" />
                     </Form.Group>
                     {this.state.filtros && <><Row>
@@ -99,11 +109,11 @@ class Filters extends Component {
                         </Col>
                         <Col md={6} style={{marginBottom: 5}}>
                             <label>Tipo de incidente</label><br/>
-                            <select name="" id="">
+                            <select name="" id="" onChange={(e)=>this.addFilter(e.target.value)}>
                                 <option value=""></option>                            
                                 <option value="robo">Robo</option>
-                                <option value="Venta de drogas">Acoso</option>
-                                <option value="Violencia">Violencia</option>
+                                <option value="ventaDeDrogas">Acoso</option>
+                                <option value="violencia">Violencia</option>
                             </select>
                         </Col>
                     </Row>
@@ -140,7 +150,7 @@ class Filters extends Component {
                 <Button variant="secondary" onClick={this.props.handleClose}>
                     Cancelar
                 </Button>
-                <Button variant="primary" onClick={()=>{console.log(this.props.Usuarios)}}>
+                <Button variant="primary" onClick={this.props.aplicarFiltros}>
                     Aceptar
                 </Button>
                 </Modal.Footer>

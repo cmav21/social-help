@@ -23,7 +23,7 @@ class NavigationBar extends Component {
 
     render() {
 
-        const height = !this.state.isTop ? "reduceHeight" : "nabvar"
+        const height = !this.state.isTop ? "reduceHeight my-1" : "nabvar my-3"
         const opacity = !this.state.isTop ? "reduceOpacity" : "navigationBar"
 
 
@@ -41,16 +41,19 @@ class NavigationBar extends Component {
                             />
                             {' Social Help '}
                         </Navbar.Brand>
-                        <Nav className="ml-auto">
-                            <NavLink className= "nav-link mt-2" to="/home">Home</NavLink>
-                            <NavLink className="nav-link mt-2" to="/incidentes">Incidentes</NavLink>
-                            <NavLink className="nav-link mt-2" to="/nosotros">Sobre nosotros</NavLink>
-                            {this.props.filters && <NavLink className="nav-link mt-2 text-white" to="#" onClick={this.props.openFilters}>Filtros</NavLink> }
-                            <NavLink className="nav-link mt-2" to="/simbologia">Simbologia</NavLink>
-                            <NavLink className="nav-link" to="/ingresar">
-                                <button className="btn loginButton">INICIAR SESIÓN <i className="ml-1 fas fa-arrow-right"></i></button>
-                            </NavLink>
-                        </Nav>
+                        <Navbar.Toggle className="bg-dark" aria-controls="basic-navbar-nav" />
+                        <Navbar.Collapse id="basic-navbar-nav">
+                            <Nav className="ml-auto">
+                                <NavLink className= "nav-link mt-2" to="/home">Home</NavLink>
+                                <NavLink className="nav-link mt-2" to="/incidentes">Incidentes</NavLink>
+                                <NavLink className="nav-link mt-2" to="/nosotros">Sobre nosotros</NavLink>
+                                {this.props.filters && <NavLink className="nav-link mt-2 text-white" to="#" onClick={this.props.openFilters}>Filtros</NavLink> }
+                                <NavLink className="nav-link mt-2" to="/simbologia">Simbologia</NavLink>
+                                <NavLink className="nav-link" to="/ingresar">
+                                    <button className="btn loginButton">INICIAR SESIÓN <i className="ml-1 fas fa-arrow-right"></i></button>
+                                </NavLink>
+                            </Nav>
+                        </Navbar.Collapse>
                     </Navbar>
                 </Container>
             </Container>

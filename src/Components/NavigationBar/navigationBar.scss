@@ -15,12 +15,11 @@ body {
     opacity: .9;
     .nabvar {
         transition: 500ms;
-        height: 100px;
     }
 
     .reduceHeight {
         transition: 500ms;
-        height: 80px;
+        // height: 80px;
         opacity: 1;
     }
 

@@ -13,6 +13,7 @@ class Home extends Component {
 
     state = {
         class: '',
+        a:[],
         data: [],
         startDate: new Date(),
         incidents: [],
@@ -25,27 +26,27 @@ class Home extends Component {
         showUserData: false
     }
 
-    applyFilters = () => {
-        const incidents = {...this.state.incidents};
-        const filters = this.state.appliedFilters;
-        if(!this.state.showFilters) {
-            const result = Object.keys(incidents).filter((element) => {
-                for (const key in filters) {
-                    if(incidents[element][key] === filters[key]){
-                        return element;
-                    }
-                }
-            });
-            const newIncidents = result.map((element,i) => incidents[element]);
-            this.setState({
-                data: newIncidents
-            });
-        } else {
-            this.setState({
-                data: incidents
-            });
-        }
-    }
+    // applyFilters = () => {
+    //     const incidents = {...this.state.incidents};
+    //     const filters = this.state.appliedFilters;
+    //     if(!this.state.showFilters) {
+    //         const result = Object.keys(incidents).filter((element) => {
+    //             for (const key in filters) {
+    //                 if(incidents[element][key] === filters[key]){
+    //                     return element;
+    //                 }
+    //             }
+    //         });
+    //         const newIncidents = result.map((element,i) => incidents[element]);
+    //         this.setState({
+    //             data: newIncidents
+    //         });
+    //     } else {
+    //         this.setState({
+    //             data: incidents
+    //         });
+    //     }
+    // }
 
     addFilterHandler = (filter, value) => {
         let filters = {...this.state.appliedFilters};
@@ -110,22 +111,22 @@ class Home extends Component {
         });
     }
 
-    applyFilters(filter) {
-        this.props.dataFiltered(filter, this.state.incidents, this.state.appliedFilters);
+    applyFilters = () => {
+        this.setState({
+            data: this.props.dataFiltered
+        });
     }
 
     render(){
+        console.log(this.props);
         return(
             <>
-            {
-                console.log(this.props)
-            }
                 <NavigationBar 
                     filters={true}
                     openFilters={this.handleShow}
                 />
                 <Container fluid={true} style={{height:'99vh', margin:0, padding:0}}>
-                    <MapView incidents={this.state.data}/>                    
+                    <MapView incidents={this.state.data} type={this.props.newState.Filtros.section} />                    
                 </Container>
                 <Filters 
                     show={this.state.showModal} 
@@ -134,13 +135,13 @@ class Home extends Component {
                     handleChange={this.state.handleChange}
                     todos={()=>this.props.todos(this.state.incidents)}
                     incidentesUsurio={()=>this.props.usuario(this.state.incidents)}
-                    porFiltro={()=>this.props.filtro(this.state.incidents)}
+                    porFiltro={(filters)=>this.props.filtro(this.state.incidents, filters)}
                     todasZonas={()=>this.props.allZones(this.state.incidents)}
                     filtroPorZona={(filtro)=>this.props.filtroZona(filtro,this.state.incidents)}
                     logged={this.props.newState.Usuarios.logged}
-                    aplicarFiltros={(filtro)=>this.applyFilters(filtro)}
+                    aplicarFiltros={this.applyFilters}
+                    newState={this.props.newState}
                 />
-                {console.log(this.props)}
             </> 
 
         )
@@ -150,7 +151,7 @@ class Home extends Component {
 const mapStateToProps = state => {
     return {
         newState: state,
-        dataFiltered: (filter, data, filters = null) => filterData(filter,data, filters)
+        dataFiltered: filterData(state.Filtros.type, state.Filtros.payload)
     }
 }
 
@@ -183,7 +184,7 @@ const mapDispatchToProps = dispatch => {
     return {
         todos: (data) => dispatch(verTodos(data)),
         usuario: (data) => dispatch(datosUsuario(data)),
-        filtro: (data) => dispatch(porFiltro(data)),
+        filtro: (data, filters) => dispatch(porFiltro(data, filters)),
         allZones: (data) => dispatch(todasZonas(data)),
         filtroZona: (filtro,data) => dispatch(zonaPorFiltro(filtro,data))
     }
