@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Modal, Button, Container, Row, Col, Form, Card, Nav } from 'react-bootstrap';
+import { InputGroup, FormControl, Modal, Button, Container, Row, Col, Form, Card, Nav } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import { verTodos, datosUsuario, porFiltro } from '../../../Store/Actions/Filtros';
 import DatePickerInput from './datepicker';
@@ -7,31 +7,25 @@ import DatePickerInput from './datepicker';
 class Filters extends Component {
     
     state = {
-        filter: [],
-        todos: true,
-        usuario: false,
-        filtros: false,
-        todasZonas: true,
-        porFiltrosZonas: false,
-        filtroZona: ''        
+        filters: { date: this.parseDateHandler(this.props.startDate)},
+        showFilters: false,
     }
 
-    addFilter = (newFilter) => {
-        const filters = [...this.state.filter, newFilter];
-        this.setState({
-            filter: filters
-        });
+    parseDateHandler (date) { 
+        return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+    }
+ 
+    addFiltersHandler = (filter, value) => {
+        const filters = {...this.state.filters};
+        filters[filter] = value;
+        this.setState({filters});
     }
 
-    filtersHandler(keyTrue, keyFalse, secondKeyFalse = '') {
-        this.setState({[keyFalse]: false, [keyTrue]: true, [secondKeyFalse]: false})
-    }
-
-    changeWindowHandler(window) {
+    changeWindowHandler = window => {
         this.setState({filter: window});
     }
 
-    showCardBody() {
+    showCardBody = () => {
         let body = '';
         if(this.state.filter === 'zone') {
             body = <Card.Body>
@@ -39,9 +33,8 @@ class Filters extends Component {
                     <Form.Group controlId="formBasicCheckbox">
                         <Form.Check 
                             type="checkbox" 
-                            checked={this.state.todasZonas} 
                             label="Ver todos los tipos de zona" 
-                            onClick={()=>{this.props.todasZonas(); this.filtersHandler('todasZonas', 'porFiltrosZonas')}}
+                            onClick={this.props.todasZonas}
                             />
                     </Form.Group>
                     <Form.Group controlId="formBasicCheckbox">
@@ -49,14 +42,13 @@ class Filters extends Component {
                             type="checkbox" 
                             checked={this.state.porFiltrosZonas} 
                             label="Seleccionar por filtro"
-                            onClick={()=>{this.filtersHandler('porFiltrosZonas', 'todasZonas')}}
-                            />
+                        />
                     </Form.Group>
                     {
                         this.state.porFiltrosZonas && <Row>
                             <Col>
                                 <label>Tipo de zona</label><br/>
-                                <select name="" id="" onChange={(e)=>{this.setState({filtroZona: e.target.value}); this.props.filtroPorZona(this.state.filtroZona)}}>
+                                <select name="" id="">
                                     <option value=""></option>                            
                                     <option value="seguro">Segura</option>
                                     <option value="riesgoMedio">riesgo medio</option>
@@ -69,63 +61,90 @@ class Filters extends Component {
         } else {
             body = <Card.Body>
             <Card.Title>Seleccione el filtro para mostrar los incidentes</Card.Title>
-            <Container className="m-0 p-0">
-                    <Form.Group controlId="formBasicCheckbox">
-                        <Form.Check 
-                        checked={this.state.todos}
-                        type="checkbox" 
-                        onClick={()=>{this.filtersHandler('todos', 'usuario', 'filtros'); this.props.todos()}} 
-                        label="Ver todos los reportes"
-                    />
-                    </Form.Group>
-                    {
-                        this.props.logged && <Form.Group controlId="formBasicCheckbox">
-                            <Form.Check
-                                checked={this.state.usuario} 
-                                type="checkbox" 
-                                onClick={()=>{this.filtersHandler('usuario', 'todos','filtros'); this.props.incidentesUsurio()}} 
-                                label="Ver unicamente mis reportes" />
+                <Container className="m-0 p-0">
+                        <Form.Group as={Row}>
+                            <Col sm={10}>
+                                <Form.Check
+                                    type="radio"
+                                    label="Ver todos los reportes"
+                                    name="formHorizontalRadios"
+                                    id="formHorizontalRadios1"
+                                    onClick={()=>{
+                                        this.props.todos();
+                                        this.setState({ showFilters: false })
+                                    }}
+                                />
+                                <Form.Check
+                                    type="radio"
+                                    label="Mostrar zonas seguras"
+                                    name="formHorizontalRadios"
+                                    id="formHorizontalRadios2"
+                                    onClick={()=>{
+                                        this.props.safeZones();
+                                        this.setState({ showFilters: false })                                        
+                                    }}
+                                />
+                                {
+                                    this.props.logged && <Form.Check
+                                        type="radio"
+                                        label="Ver unicamente mis reportes"
+                                        name="formHorizontalRadios"
+                                        id="formHorizontalRadios3"
+                                        onClick={()=>{
+                                            this.props.incidentesUsurio();
+                                            this.setState({ showFilters: false })
+                                        }}
+                                    />
+                                }
+                                <Form.Check
+                                    type="radio"
+                                    label="Seleccionar filtros"
+                                    name="formHorizontalRadios"
+                                    id="formHorizontalRadios2"
+                                    onClick={()=>this.setState({ showFilters: !this.state.showFilters })}
+                                />
+                            </Col>
                         </Form.Group>
-                    }
-                    <Form.Group controlId="formBasicCheckbox">
-                        <Form.Check
-                            checked={this.state.filtros} 
-                            type="checkbox" 
-                            onClick={()=>{this.filtersHandler('filtros', 'usuario', 'todos'); this.props.porFiltro({
-                                date: this.props.startDate,
-                                type: this.state.filter
-                            })}} 
-                            label="Seleccionar filtros" />
-                    </Form.Group>
-                    {this.state.filtros && <><Row>
-                        <Col md={6} style={{marginBottom: 5}}>
-                            <label>Fecha</label><br/>
-                            <DatePicker
-                                dateFormat="yyyy/MM/dd"
-                                selected={this.props.startDate}
-                                onChange={this.props.handleChange}
-                                customInput={ <DatePickerInput />}
-                            />
-                        </Col>
-                        <Col md={6} style={{marginBottom: 5}}>
-                            <label>Tipo de incidente</label><br/>
-                            <select name="" id="" onChange={(e)=>this.addFilter(e.target.value)}>
-                                <option value=""></option>                            
-                                <option value="robo">Robo</option>
-                                <option value="ventaDeDrogas">Acoso</option>
-                                <option value="violencia">Violencia</option>
-                            </select>
-                        </Col>
-                    </Row>
-                   </>}
-            </Container>
+                        {this.state.showFilters && <><Row>
+                            <Col md={6} style={{marginBottom: 5}}>
+                                <label>Fecha</label><br/>
+                                <DatePicker
+                                    dateFormat="yyyy/MM/dd"
+                                    selected={this.props.startDate}
+                                    onChange={date => {
+                                        this.props.handleChange(date);
+                                        this.addFiltersHandler('date', this.parseDateHandler(date))
+                                    }}
+                                    customInput={ <DatePickerInput />}
+                                />
+                            </Col>
+                            <Col md={6} style={{marginBottom: 5}}>
+                                <label>Tipo de incidente</label><br/>
+                                <select onChange={(e)=>this.addFiltersHandler('type', e.target.value)}>
+                                    <option value=""></option>                            
+                                    <option value="robo">Robo</option>
+                                    <option value="ventaDeDrogas">Acoso</option>
+                                    <option value="violencia">Violencia</option>
+                                </select>
+                            </Col>
+                            <Col md={6} style={{marginBottom: 5}}>
+                                <label>Tipo de entorno</label><br/>
+                                <select onChange={(e)=>this.addFiltersHandler('environment', e.target.value)}>
+                                    <option value=""></option>                            
+                                    <option value="pocaIluminacion">poca iluminacion</option>
+                                    <option value="ventaDeDrogas">Acoso</option>
+                                    <option value="violencia">Violencia</option>
+                                </select>
+                            </Col>
+                        </Row>
+                    </>}
+                </Container>
             </Card.Body>
         }
         return body;
     }
 
     render() {
-    
         return (
             <Modal show={this.props.show} onHide={this.props.handleClose}>
                 <Modal.Header closeButton>
@@ -138,9 +157,9 @@ class Filters extends Component {
                         <Nav.Item>
                             <Nav.Link href="#first" onClick={()=>this.changeWindowHandler('incidents')}>Incidentes</Nav.Link>
                         </Nav.Item>
-                        <Nav.Item>
+                        {/* <Nav.Item>
                             <Nav.Link href="#link" onClick={()=>this.changeWindowHandler('zone')}>Zonas</Nav.Link>
-                        </Nav.Item>
+                        </Nav.Item> */}
                         </Nav>
                     </Card.Header>
                     {this.showCardBody()}
@@ -150,9 +169,12 @@ class Filters extends Component {
                 <Button variant="secondary" onClick={this.props.handleClose}>
                     Cancelar
                 </Button>
-                <Button variant="primary" onClick={this.props.aplicarFiltros}>
-                    Aceptar
-                </Button>
+                <Button variant="primary" onClick={()=>{
+                        this.state.showFilters && this.props.porFiltro(this.state.filters);
+                        this.props.handleClose();
+                }}>
+                        Aceptar
+                 </Button>
                 </Modal.Footer>
             </Modal>
         );
