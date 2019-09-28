@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Map from 'pigeon-maps';
-import Marker from 'pigeon-marker';
 import DescriptionCard from './Components/DescripcionCard';
+import Overlay from 'pigeon-overlay';
 
 class MapView extends Component {
 
@@ -24,9 +24,10 @@ class MapView extends Component {
 
     renderMarkers = () => {
         const incidents = this.props.incidents;
-
         return Object.keys(incidents).map((incident, i) => {
-            return <Marker key={incident} anchor={[incidents[incident].latitude, incidents[incident].longitude]} payload={1} onClick={()=>this.saveIncidentHandler(this.props.incidents[incident])} />
+            return <Overlay key={incident} anchor={[incidents[incident].latitude, incidents[incident].longitude]} offset={[15, 30]}>
+                <img src={require(`../../../../assets/${this.props.type.zone}.png`)} offset={0} alt="" width="30px" onClick={()=>this.saveIncidentHandler(this.props.incidents[incident])} style={{cursor: 'pointer'}} />
+            </Overlay>
         });
 
     }
