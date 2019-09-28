@@ -14,18 +14,18 @@ import Bully from '../../assets/bully.png'
 const Symbology = () => {
 
     const data = [
-        {
-            text: 'Referente a un robo en la zona indicada',
-            image: Thief
-        },
-        {
-            text: 'Referente a cualquier tipo de acoso',
-            image: Bully
-        },
-        {
-            text: 'Violencia o disturbios en las zonas',
-            image: Violence
-        },
+        // {
+        //     text: 'Referente a un robo en la zona indicada',
+        //     image: Thief
+        // },
+        // {
+        //     text: 'Referente a cualquier tipo de acoso',
+        //     image: Bully
+        // },
+        // {
+        //     text: 'Violencia o disturbios en las zonas',
+        //     image: Violence
+        // },
         {
             text: 'Zona segura',
             image: Safe
@@ -43,7 +43,7 @@ const Symbology = () => {
 
     const renderSymbols = () => (
         data.map(({text, image}, i) => (
-            <Col xs={12} md={4} className="mb-4">
+            <Col key={text} xs={12} md={4} className="mb-4">
                 <Symbol image={image} text={text} />
             </Col>
         ))

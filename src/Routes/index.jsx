@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Greet from '../Components/Greet';
+import Greet from '../Components/404';
 import Incidents from '../Components/Incidents/Incidents';
 import AboutUs from '../Components/About/AboutUs';
 import Simbology from '../Components/Simbology/Simbology';
