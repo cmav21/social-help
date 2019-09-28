@@ -1,18 +1,23 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
 import Header from '../NavigationBar/NavigationBar';
-import { Form, Button, Container, Row, Col } from 'react-bootstrap';
+import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { login } from '../../Store/Actions/Users';
 import './login.scss';
-
+import { errorLogin, logout } from '../../Store/Actions/Users';
+ 
 class Login extends Component {
 
     state = {
         email: '',
         password: '',
-        user: ''
+        user: '',
+    }
+
+    setDataState = (key, value) => {
+        this.setState({ [key]: value })
     }
 
     changeCredentialsHandler = (text, type) => {
@@ -27,7 +32,7 @@ class Login extends Component {
             this.props.history.goBack();
         })
         .catch(( err ) => {
-            console.log(err);
+            this.props.error();
         });
 
     }
@@ -39,6 +44,13 @@ class Login extends Component {
                 <Container className="login">
                     <Row style={{display:'flex', justifyContent:'center'}}>
                         <Col sm={12} md={6} className="my-5">
+                            { this.props.newState.Usuarios.type === 'ERROR_LOGIN' && <Alert variant="danger" onClose={this.props.newBeginning} dismissible>
+                                    <Alert.Heading>Error</Alert.Heading>
+                                    <p>
+                                        Ups!, el usuario o la contraseña no son correctos
+                                    </p>
+                                </Alert>
+                            }
                             <h1>Inicio de Sesión</h1>
                             <Form className="login">
                                 <Form.Group controlId="formBasicEmail">
@@ -76,7 +88,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        authenticateUser: ( user ) => dispatch(login(user))
+        authenticateUser: ( user ) => dispatch(login(user)),
+        error: () => dispatch(errorLogin()),
+        newBeginning: () => dispatch(logout()) 
     }
 }
 
