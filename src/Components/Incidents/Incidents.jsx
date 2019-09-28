@@ -43,8 +43,7 @@ class Home extends Component {
     }
 
     render(){
-        const data = this.props.newState.Filtros.payload
-        console.log(this.props)
+        const data = this.props.newState.Filtros;
         return(
             <>
                 <NavigationBar 
@@ -52,7 +51,7 @@ class Home extends Component {
                     openFilters={this.handleShow}
                 />
                 <Container fluid={true} style={{height:'99vh', margin:0, padding:0}}>
-                    <MapView incidents={!isUndefined(data) && !isNull(data) ? data : {}} />                    
+                    <MapView type={data} incidents={!isUndefined(data.payload) && !isNull(data.payload) ? data.payload : {}} />                    
                 </Container>
                 <Filters 
                     show={this.state.showModal} 
