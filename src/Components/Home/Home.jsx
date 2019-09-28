@@ -8,12 +8,12 @@ import './home.scss';
 const Home = () => (
         <div className="container-fluid m-0 p-0">
             <NavigationBar />
-            <div class="bd-example">
-                <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(31).jpg" class="d-block w-100" alt="..." />
-                            <div class="carousel-caption d-none d-md-block">
+            <div className="bd-example">
+                <div id="carouselExampleCaptions" className="carousel slide" data-ride="carousel">
+                    <div className="carousel-inner">
+                        <div className="carousel-item active">
+                            <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(31).jpg" className="d-block w-100" alt="..." />
+                            <div className="carousel-caption d-none d-md-block">
                                 <h1>Conoce Social Help</h1>
                                 <p>Red de contactos segura</p>
                             </div>
