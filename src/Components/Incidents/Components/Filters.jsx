@@ -171,6 +171,7 @@ class Filters extends Component {
                 </Button>
                 <Button variant="primary" onClick={()=>{
                         this.state.showFilters && this.props.porFiltro(this.state.filters);
+                        this.setState({filters: {date: this.props.startDate}})
                         this.props.handleClose();
                 }}>
                         Aceptar
