@@ -16,7 +16,12 @@ const loginReducer = (state = initialState, action) => {
             return Object.assign({}, state, {
                 type: action.type,
                 logged: action.logged
-            });    
+            });   
+        case 'ERROR_LOGIN': 
+            return Object.assign({}, state, {
+                type: action.type,
+                logged: action.logged
+            })
         default:
             return state;
     }

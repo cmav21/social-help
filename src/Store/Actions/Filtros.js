@@ -5,14 +5,14 @@ export const verTodos = () => {
     return dispatch => {
         firebase.database().ref('incidents').on('value', (snapshot) => {
             const data = snapshot.val();
-            return dispatch({type:'VER_TODOS', payload: data}) ;
+            return dispatch({type:'VER_TODOS', payload: data, zone: 'danger'}) ;
         });
 }}
 
 export const datosUsuario = usuarioId => {
     return dispatch => {
         firebase.database().ref('incidents').orderByChild('usuarioId').equalTo(usuarioId).on('value', (snapshot) => {
-            return dispatch({type: 'DATOS_USUARIO', payload: snapshot.val()}) ;
+            return dispatch({type: 'DATOS_USUARIO', payload: snapshot.val(), zone: 'danger'}) ;
     });
 }}
 
@@ -23,7 +23,7 @@ export const porFiltro = (filters) => {
             let keysFilters = Object.keys(filters)
             const keysFiltered = filterData(data, keysFilters, filters);
             const dataFiltered = keysFiltered.map((incident, i) => data[incident]);
-            return dispatch({type: 'POR_FILTRO', payload: dataFiltered});
+            return dispatch({type: 'POR_FILTRO', payload: dataFiltered, zone: filters.hasOwnProperty('environment') ? 'almostDanger' : 'danger' });
         })
     }
 };
@@ -44,7 +44,7 @@ export const getSafeZones = () => {
     return dispatch => {
         firebase.database().ref('safeZones').on('value', snapshot => {
             const data = snapshot.val()
-            return dispatch({ type: 'SAFE_ZONES', payload: data })
+            return dispatch({ type: 'SAFE_ZONES', payload: data, zone: 'safe' })
         })
     }
 }

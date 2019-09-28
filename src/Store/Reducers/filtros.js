@@ -1,42 +1,38 @@
+import firebase from 'firebase';
+import { initialAction } from '../Actions/Filtros';
+
 
 const initialState = {
-    type: 'VER_TODOS' 
-}
+    type: 'VER_TODOS',
+    zone: 'danger'
+};
 
 const filtrosReducer = (state = initialState, action) => {
    switch (action.type) {
        case 'VER_TODOS':
            return Object.assign({}, state, {
                type: action.type,
-               payload: action.data,
-               section: action.section
+               payload: action.payload,
+               zone: action.zone
            });
        case 'DATOS_USUARIO':
            return Object.assign({}, state, {
                type: action.type,
-               payload: action.data,
-               section: action.section
+               payload: action.payload,
+               zone: action.zone
            });    
         case 'POR_FILTRO':
-        return Object.assign({}, state, {
-            type: action.type,
-            payload: action.data,
-            section: action.section,
-            filters: action.filters
-        });    
-        case 'TODAS_ZONAS':
             return Object.assign({}, state, {
                 type: action.type,
-                payload: action.data,
-                section: action.section
-            });   
-        case 'FILTRO_ZONA':
+                payload: action.payload,
+                zone: action.zone
+            });
+        case 'SAFE_ZONES':
             return Object.assign({}, state, {
                 type: action.type,
-                filter: action.filtro,
-                payload: action.data,
-                section: action.section
-            });     
+                payload: action.payload,
+                zone: action.zone
+            });        
        default:
            return state;
    }
